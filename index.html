@@ -3,163 +3,123 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard | Ab To Padh Le</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Ab To Padh Le | Premium AI Revision</title>
+
+  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- FontAwesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+  <!-- Marked.js & MathJax -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [
+          ['$', '$'],
+          ['\\(', '\\)']
+        ],
+        displayMath: [
+          ['$$', '$$'],
+          ['\\[', '\\]']
+        ]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <!-- MERMAID.JS FOR VISUAL MINDMAPS -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'base',
+      themeVariables: {
+        primaryColor: 'rgba(59, 130, 246, 0.2)',
+        primaryTextColor: '#f8fafc',
+        primaryBorderColor: '#3b82f6',
+        lineColor: '#a1a1aa',
+        secondaryColor: 'rgba(16, 185, 129, 0.2)',
+        tertiaryColor: '#09090b'
+      }
+    });
+  </script>
+  <!-- SVG PAN ZOOM LIBRARY FOR INTERACTIVE NOTEBOOK-LM STYLE MINDMAPS -->
+  <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
+
   <style>
-    :root {
+    /* ================= GLOBAL RESET ================= */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    /* ================= THEME VARIABLES ================= */
+    :root,
+    [data-theme="dark"] {
       --bg-main: #09090b;
       --glass-panel: rgba(255, 255, 255, 0.03);
       --glass-border: rgba(255, 255, 255, 0.08);
+      --glass-hover: rgba(255, 255, 255, 0.06);
       --accent-blue: #3b82f6;
       --accent-green: #10b981;
       --text-main: #f8fafc;
       --text-muted: #a1a1aa;
+      --grid-color: rgba(255, 255, 255, 0.1);
+      --input-bg: rgba(0, 0, 0, 0.3);
+      --btn-glass-bg: rgba(255, 255, 255, 0.05);
+      --btn-glass-hover: rgba(255, 255, 255, 0.1);
+      --btn-primary-bg: rgba(255, 255, 255, 0.9);
+      --btn-primary-text: #000;
       --danger: #ef4444;
       --warning: #f59e0b;
+      --success: #10b981;
     }
 
+    [data-theme="light"] {
+      --bg-main: #f4f4f5;
+      --glass-panel: rgba(255, 255, 255, 0.7);
+      --glass-border: rgba(0, 0, 0, 0.08);
+      --glass-hover: rgba(255, 255, 255, 0.9);
+      --accent-blue: #2563eb;
+      --accent-green: #059669;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --grid-color: rgba(0, 0, 0, 0.06);
+      --input-bg: rgba(255, 255, 255, 0.8);
+      --btn-glass-bg: rgba(0, 0, 0, 0.04);
+      --btn-glass-hover: rgba(0, 0, 0, 0.08);
+      --btn-primary-bg: #0f172a;
+      --btn-primary-text: #ffffff;
+      --danger: #dc2626;
+      --warning: #d97706;
+      --success: #059669;
+    }
+
+    html,
     body {
       font-family: 'Inter', sans-serif;
       background-color: var(--bg-main);
       color: var(--text-main);
+      background-image: radial-gradient(var(--grid-color) 1px, transparent 1px);
+      background-size: 24px 24px;
+      min-height: 100vh;
       margin: 0;
       padding: 0;
-      min-height: 100vh;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
-    .glass-card {
-      background: var(--glass-panel);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--glass-border);
-      border-radius: 12px;
-      padding: 20px;
-    }
-
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 20px;
-      border-bottom: 1px solid var(--glass-border);
-      background: rgba(0, 0, 0, 0.5);
-    }
-
-    .nav-tabs {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      padding-bottom: 5px;
-    }
-
-    .tab-btn {
-      background: transparent;
-      border: 1px solid var(--glass-border);
-      color: var(--text-muted);
-      padding: 8px 15px;
-      border-radius: 8px;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: 0.3s;
-    }
-
-    .tab-btn.active {
-      background: rgba(59, 130, 246, 0.15);
-      border-color: var(--accent-blue);
-      color: var(--accent-blue);
-      font-weight: 600;
-    }
-
-    input,
-    select,
-    textarea {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 10px;
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid var(--glass-border);
-      color: white;
-      border-radius: 8px;
-      font-family: inherit;
-    }
-
-    button.btn-primary {
-      background: var(--text-main);
-      color: var(--bg-main);
-      border: none;
-      padding: 10px 15px;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    button.btn-danger {
-      background: rgba(239, 68, 68, 0.1);
-      border: 1px solid var(--danger);
-      color: var(--danger);
-      padding: 5px 10px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    button.btn-success {
-      background: rgba(16, 185, 129, 0.1);
-      border: 1px solid var(--accent-green);
-      color: var(--accent-green);
-      padding: 5px 10px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 15px;
-      font-size: 14px;
-    }
-
-    th,
-    td {
-      text-align: left;
-      padding: 12px;
-      border-bottom: 1px solid var(--glass-border);
-    }
-
-    th {
-      color: var(--text-muted);
-      font-weight: 600;
-    }
-
-    /* Auth Screen */
-    #authScreen {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-
-    #dashboardScreen {
-      display: none;
-      padding: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .tab-content {
-      display: none;
-      animation: fadeIn 0.3s ease;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-
-    @keyframes fadeIn {
+    @keyframes fadeInUp {
       from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(20px);
       }
 
       to {
@@ -167,383 +127,1430 @@
         transform: translateY(0);
       }
     }
+
+    .animate-up {
+      animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    .delay-1 {
+      animation-delay: 0.1s;
+    }
+
+    .delay-2 {
+      animation-delay: 0.2s;
+    }
+
+    /* ================= GLASS UI COMPONENTS ================= */
+    .glass-card {
+      background: var(--glass-panel);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+      transition: border 0.3s ease, background 0.3s ease;
+    }
+
+    .btn-glass {
+      background: var(--btn-glass-bg);
+      border: 1px solid var(--glass-border);
+      color: var(--text-main);
+      font-weight: 500;
+      padding: 10px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .btn-glass:hover {
+      background: var(--btn-glass-hover);
+    }
+
+    .btn-glass:active {
+      transform: scale(0.95);
+    }
+
+    .btn-primary {
+      background: var(--btn-primary-bg);
+      color: var(--btn-primary-text);
+      border: none;
+      font-weight: 600;
+      padding: 16px 24px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      text-decoration: none;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .btn-primary:active:not(:disabled) {
+      transform: scale(0.97);
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="file"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      background: var(--input-bg);
+      border: 1px solid var(--glass-border);
+      color: var(--text-main);
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 16px;
+      box-sizing: border-box;
+      transition: 0.3s;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+    }
+
+    /* ================= LAYOUTS ================= */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 20px;
+      margin: 15px;
+    }
+
+    .brand-logo {
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-main);
+      text-decoration: none;
+    }
+
+    .brand-icon {
+      background: var(--btn-glass-bg);
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--glass-border);
+      color: var(--accent-blue);
+    }
+
+    .creator-badge {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(16, 185, 129, 0.1));
+      border: 1px solid var(--glass-border);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    /* LANDING PAGE STYLES */
+    .hero {
+      text-align: center;
+      padding: 40px 20px;
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .hero h1 {
+      font-size: clamp(32px, 6vw, 56px);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 20px;
+      letter-spacing: -1px;
+    }
+
+    .hero h1 span {
+      color: var(--accent-blue);
+    }
+
+    .hero p {
+      font-size: clamp(15px, 3vw, 18px);
+      color: var(--text-muted);
+      margin-bottom: 35px;
+      line-height: 1.6;
+      max-width: 600px;
+      margin-inline: auto;
+    }
+
+    /* REVIEWS SECTION */
+    .section-title {
+      text-align: center;
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 30px;
+      margin-top: 40px;
+    }
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+      gap: 20px;
+      padding: 0 20px;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto 50px;
+    }
+
+    .review-card {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      animation: fadeInUp 0.5s ease-out;
+    }
+
+    .stars {
+      color: var(--warning);
+      font-size: 14px;
+      letter-spacing: 2px;
+    }
+
+    .review-text {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      font-style: italic;
+      flex-grow: 1;
+      display: -webkit-box;
+      -webkit-line-clamp: 5;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .review-text.expanded {
+      -webkit-line-clamp: unset;
+    }
+
+    .read-more-btn {
+      background: none;
+      border: none;
+      color: var(--accent-blue);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 5px 0;
+      margin-top: 5px;
+      text-decoration: underline;
+    }
+
+    .review-author {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-top: 1px solid var(--glass-border);
+      padding-top: 10px;
+      margin-top: 5px;
+    }
+
+    /* FORMS & FOUNDER GRID */
+    .founder-card {
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 20px;
+      border-color: rgba(59, 130, 246, 0.3);
+      background: linear-gradient(180deg, var(--glass-panel) 0%, rgba(59, 130, 246, 0.02) 100%);
+      margin: 20px auto;
+      max-width: 800px;
+    }
+
+    @media (min-width: 600px) {
+      .founder-card {
+        flex-direction: row;
+        text-align: left;
+        padding: 40px;
+        gap: 30px;
+      }
+    }
+
+    .founder-avatar {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-green));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      font-weight: 800;
+      flex-shrink: 0;
+      border: 4px solid var(--glass-border);
+    }
+
+    .forms-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));
+      gap: 20px;
+      padding: 20px;
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto 50px;
+    }
+
+    .form-card {
+      padding: 30px;
+    }
+
+    .form-card h3 {
+      margin-top: 0;
+      font-size: 18px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .rating-input {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+      gap: 5px;
+      margin-bottom: 15px;
+    }
+
+    .rating-input input {
+      display: none;
+    }
+
+    .rating-input label {
+      font-size: 24px;
+      color: var(--glass-border);
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .rating-input input:checked~label,
+    .rating-input label:hover,
+    .rating-input label:hover~label {
+      color: var(--warning);
+    }
+
+    /* ================= WORKSPACE & APP ================= */
+    #mainAppWrapper {
+      display: none;
+    }
+
+    .workspace-header {
+      text-align: center;
+      margin-bottom: 20px;
+      padding: 20px 20px 0;
+    }
+
+    .workspace-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 0 15px 50px;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 992px) {
+      .workspace-container {
+        flex-direction: row;
+        align-items: flex-start;
+      }
+    }
+
+    .panel {
+      padding: 20px;
+      flex: 1;
+      width: 100%;
+    }
+
+    .btn-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr));
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .output-box {
+      background: var(--input-bg);
+      border: 1px solid var(--glass-border);
+      padding: 20px;
+      border-radius: 12px;
+      min-height: 150px;
+      margin-bottom: 15px;
+      font-size: 14px;
+      line-height: 1.7;
+      display: none;
+      overflow-x: auto;
+    }
+
+    .loader {
+      display: none;
+      text-align: center;
+      color: var(--accent-green);
+      font-weight: 600;
+      margin: 30px 0;
+      font-size: 14px;
+    }
+
+    /* MODALS & OVERLAYS */
+    #loginModalOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(5px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      padding: 15px;
+    }
+
+    .login-modal {
+      padding: 30px 20px;
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+      transform: translateY(30px) scale(0.95);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      margin: auto;
+    }
+
+    .login-modal.active {
+      transform: translateY(0) scale(1);
+    }
+
+    #fullScreenLoader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg-main);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      transition: 0.3s ease;
+    }
+
+    /* ================= NEW PREMIUM SITE BOARD & MARQUEE ================= */
+    #siteBoard {
+      width: 100%;
+      max-width: 800px;
+      margin: 10px auto;
+      padding: 0 15px;
+    }
+
+    .marquee-container {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--glass-border);
+      padding: 10px 15px;
+      border-radius: 12px;
+      overflow: hidden;
+      white-space: nowrap;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+    }
+
+    .marquee {
+      display: inline-block;
+      padding-left: 100%;
+      animation: scroll 35s linear infinite;
+    }
+
+    .marquee-container:hover .marquee {
+      animation-play-state: paused;
+      cursor: default;
+    }
+
+    @keyframes scroll {
+      0% {
+        transform: translate(0, 0);
+      }
+
+      100% {
+        transform: translate(-100%, 0);
+      }
+    }
+
+    .latest-badge {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      z-index: 10;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.2);
+    }
+
+    .fa-bell.shake {
+      animation: shake 2s infinite;
+    }
+
+    @keyframes shake {
+
+      0%,
+      100% {
+        transform: rotate(0deg);
+      }
+
+      25% {
+        transform: rotate(-15deg);
+      }
+
+      75% {
+        transform: rotate(15deg);
+      }
+    }
+
+    /* ================= NEW PREMIUM AD BANNER ================= */
+    #adBanner {
+      display: none;
+      margin: 15px auto;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(16, 185, 129, 0.08));
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 16px;
+      padding: 20px;
+      align-items: center;
+      gap: 20px;
+      justify-content: space-between;
+      flex-direction: row;
+    }
+
+    .ad-announcement-tag {
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-green));
+      color: white;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-bottom-right-radius: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .ad-content {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .ad-img {
+      width: 120px;
+      height: 80px;
+      border-radius: 10px;
+      object-fit: cover;
+      display: none;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      border: 1px solid var(--glass-border);
+      flex-shrink: 0;
+    }
+
+    .ad-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    .ad-btn {
+      background: var(--text-main);
+      color: var(--bg-main);
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: 0.3s;
+      box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .ad-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 255, 255, 0.15);
+      color: var(--bg-main);
+      text-decoration: none;
+    }
+
+    /* ================= MCQ QUIZ UI STYLES ================= */
+    .quiz-card {
+      background: rgba(0, 0, 0, 0.1);
+      border: 1px solid var(--glass-border);
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+    }
+
+    .quiz-question {
+      font-weight: 600;
+      margin-bottom: 15px;
+      font-size: 15px;
+    }
+
+    .quiz-opt-btn {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 12px 15px;
+      margin-bottom: 10px;
+      background: var(--btn-glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--text-main);
+      transition: 0.2s;
+      font-size: 14px;
+    }
+
+    .quiz-opt-btn:hover:not(:disabled) {
+      background: var(--btn-glass-hover);
+      border-color: var(--accent-blue);
+    }
+
+    .quiz-opt-btn.selected {
+      border-color: var(--accent-blue);
+      background: rgba(59, 130, 246, 0.1);
+      font-weight: 600;
+    }
+
+    .quiz-opt-btn.correct {
+      border-color: var(--success);
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--success);
+    }
+
+    .quiz-opt-btn.wrong {
+      border-color: var(--danger);
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--danger);
+    }
+
+    .quiz-opt-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.8;
+    }
+
+    .score-board {
+      text-align: center;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent-green);
+      margin-top: 20px;
+      padding: 20px;
+      background: rgba(16, 185, 129, 0.1);
+      border-radius: 10px;
+      display: none;
+    }
+
+    /* ================= MINDMAP PAN & ZOOM STYLES (NEW) ================= */
+    #mermaidDiagram {
+      width: 100%;
+      height: 600px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: grab;
+      position: relative;
+      border: 1px solid var(--glass-border);
+    }
+
+    #mermaidDiagram:active {
+      cursor: grabbing;
+    }
+
+    @media (max-width: 600px) {
+      .hide-mobile {
+        display: none !important;
+      }
+
+      .navbar {
+        margin: 10px;
+        padding: 10px 15px;
+      }
+
+      .hero {
+        padding: 30px 15px;
+      }
+
+      /* Mobile Ad Layout */
+      #adBanner {
+        flex-direction: column;
+        text-align: center;
+        padding: 25px 15px 15px;
+      }
+
+      .ad-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+      }
+
+      .ad-img {
+        width: 100%;
+        height: 160px;
+      }
+
+      .ad-btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      #mermaidDiagram {
+        height: 450px;
+      }
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- LOGIN SCREEN -->
-  <div id="authScreen">
-    <div class="glass-card" style="width: 350px; text-align: center;">
-      <h2 style="margin-top: 0;"><i class="fa-solid fa-user-shield text-blue"></i> Admin Login</h2>
-      <p style="color: var(--text-muted); font-size: 13px;">Enter your secret master key</p>
-      <input type="password" id="adminSecret" placeholder="Admin Secret Key">
-      <button class="btn-primary" style="width: 100%;" onclick="loginAdmin()">Access Dashboard</button>
-      <div id="authError" style="color: var(--danger); margin-top: 10px; font-size: 13px;"></div>
+  <!-- GLOBAL LOADER (Auto-Login flicker rokne ke liye) -->
+  <div id="fullScreenLoader">
+    <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 40px; color: var(--accent-blue);"></i>
+    <p style="font-weight: 600; color: var(--text-muted); margin-top: 10px;">Setting up workspace...</p>
+  </div>
+
+  <!-- ================= LANDING PAGE ================= -->
+  <!-- YE AAPKA PEHLA SEPARATE PAGE HAI (SPA Logic) -->
+  <div id="landingPage" style="display: none;">
+    <nav class="navbar glass-card animate-up">
+      <div class="brand-logo">
+        <div class="brand-icon"><i class="fa-solid fa-shield-halved"></i></div>Ab To Padh Le
+      </div>
+      <div style="display: flex; gap: 10px; align-items: center;">
+        <div class="creator-badge hide-mobile"><i class="fa-solid fa-bolt"></i> By Aniket Kewat</div>
+        <button class="btn-glass" onclick="toggleTheme()" id="themeBtnLanding" title="Toggle Theme" style="padding: 8px 10px; border-radius: 50%;"><i class="fa-solid fa-sun"></i></button>
+      </div>
+    </nav>
+
+    <!-- PREMIUM NOTICES & ADS -->
+    <div id="siteBoard" class="animate-up delay-1">
+      <div class="marquee-container" id="tickerWrapper" style="display: none;">
+        <div class="latest-badge"><i class="fa-solid fa-bell shake"></i> Latest</div>
+        <div class="marquee" id="tickerContainer"></div>
+      </div>
+
+      <div id="adBanner" class="glass-card">
+        <div class="ad-announcement-tag"><i class="fa-solid fa-bullhorn"></i> Announcement</div>
+        <div class="ad-content">
+          <img id="adBannerImg" src="" class="ad-img" alt="Ad Thumbnail">
+          <p id="adBannerText" class="ad-text"></p>
+        </div>
+        <a id="adBannerLink" href="#" target="_blank" class="ad-btn">View Details <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+    </div>
+
+    <!-- HERO SECTION -->
+    <main class="hero animate-up delay-2">
+      <h1>Master Exams with <br><span>AI Revision Tools</span></h1>
+      <p>Stop wasting time summarizing long PDFs. Let AI generate your structured notes, visual mindmaps, and interactive mock tests in seconds.</p>
+      <button class="btn-primary" style="max-width: 250px;" onclick="handleEnterWorkspace()">Enter Workspace <i class="fa-solid fa-arrow-right ms-2" style="margin-left: 8px;"></i></button>
+    </main>
+
+    <!-- REVIEWS SECTION -->
+    <div id="reviewsSection" style="display: none;">
+      <h2 class="section-title animate-up"><i class="fa-solid fa-heart" style="color: var(--danger); margin-right: 10px;"></i> Wall of Love</h2>
+      <div class="reviews-grid" id="reviewsContainer">
+        <!-- Reviews injected here by JS -->
+      </div>
+    </div>
+
+    <!-- FOUNDER SECTION -->
+    <section class="animate-up">
+      <div class="glass-card founder-card">
+        <div class="founder-avatar">AK</div>
+        <div class="founder-info">
+          <h4 style="margin: 0 0 8px 0; font-size: 22px; font-weight: 700;">Meet the Creator</h4>
+          <p style="margin: 0 0 15px 0; font-size: 14px; color: var(--text-muted); line-height: 1.6;">Hi, I'm <strong>Aniket Kewat</strong>. As a B.Ed. student at CTE Raipur, I realized we waste too much time organizing syllabus notes. I built <strong>Ab To Padh Le</strong> so we can all study smarter, master our pedagogy, and focus on becoming great teachers.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEEDBACK & DIRECT MESSAGE HUB -->
+    <div class="forms-grid animate-up">
+      <div class="glass-card form-card">
+        <h3><i class="fa-solid fa-star text-warning"></i> Drop a Review</h3>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">Your feedback helps us improve!</p>
+        <div class="rating-input">
+          <input type="radio" name="rating" id="star5" value="5" checked><label for="star5"><i class="fa-solid fa-star"></i></label>
+          <input type="radio" name="rating" id="star4" value="4"><label for="star4"><i class="fa-solid fa-star"></i></label>
+          <input type="radio" name="rating" id="star3" value="3"><label for="star3"><i class="fa-solid fa-star"></i></label>
+          <input type="radio" name="rating" id="star2" value="2"><label for="star2"><i class="fa-solid fa-star"></i></label>
+          <input type="radio" name="rating" id="star1" value="1"><label for="star1"><i class="fa-solid fa-star"></i></label>
+        </div>
+        <input type="text" id="revName" placeholder="Your Name (Optional)" style="padding: 10px; font-size: 14px;">
+        <textarea id="revText" placeholder="How is this tool helping you?" style="height: 80px; padding: 10px; font-size: 14px;"></textarea>
+        <button class="btn-glass w-100" style="background: var(--text-main); color: var(--bg-main); font-weight: 600;" onclick="submitReview()" id="btnRev">Submit Review</button>
+        <div id="revMsg" style="font-size: 12px; margin-top: 10px; text-align: center; font-weight: 500;"></div>
+      </div>
+
+      <div class="glass-card form-card">
+        <h3><i class="fa-solid fa-paper-plane text-primary"></i> Message Admin</h3>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">Feature request or found a bug? Tell Aniket directly.</p>
+        <input type="text" id="msgName" placeholder="Your Name" style="padding: 10px; font-size: 14px;">
+        <input type="text" id="msgContact" placeholder="Your Phone or Email" style="padding: 10px; font-size: 14px;">
+        <textarea id="msgText" placeholder="Type your message here..." style="height: 80px; padding: 10px; font-size: 14px;"></textarea>
+        <button class="btn-glass w-100" style="background: var(--accent-blue); color: white; font-weight: 600;" onclick="submitMessage()" id="btnMsg">Send Message</button>
+        <div id="msgStatus" style="font-size: 12px; margin-top: 10px; text-align: center; font-weight: 500;"></div>
+      </div>
     </div>
   </div>
 
-  <!-- MAIN DASHBOARD -->
-  <div id="dashboardScreen">
-    <div class="navbar glass-card" style="margin-bottom: 20px;">
-      <h3 style="margin: 0;"><i class="fa-solid fa-shield-halved" style="color: var(--accent-blue);"></i> Control Panel</h3>
-      <button class="btn-danger" onclick="logout()"><i class="fa-solid fa-power-off"></i> Logout</button>
+  <!-- ================= LOGIN MODAL ================= -->
+  <div id="loginModalOverlay">
+    <div class="login-modal glass-card" id="loginModalContent">
+      <div style="text-align: right; margin-top: -10px; margin-right: -5px;"><button onclick="closeLoginModal()" style="background:none; border:none; font-size:24px; cursor:pointer; color:var(--text-muted);">&times;</button></div>
+      <h2 style="margin-top:0; font-size:20px; font-weight:700; margin-bottom:8px;"><i class="fa-solid fa-lock" style="color:var(--accent-blue); margin-right:8px;"></i> VIP Access</h2>
+      <p style="color:var(--text-muted); font-size:13px; margin-bottom:20px;">Enter your assigned User ID and Password.</p>
+      <div id="loginError" style="color:var(--danger); font-size:12px; font-weight:600; margin-bottom:15px; display:none; background:rgba(239, 68, 68, 0.1); padding:10px; border-radius:8px; border:1px solid rgba(239, 68, 68, 0.2);"></div>
+      <input type="text" id="userIdInput" placeholder="User ID" autocomplete="off">
+      <input type="password" id="userPassInput" placeholder="Password">
+      <button class="btn-primary" onclick="handleLogin()" id="loginBtn">Authenticate & Enter</button>
     </div>
+  </div>
 
-    <div class="nav-tabs">
-      <button class="tab-btn active" onclick="switchTab('users')"><i class="fa-solid fa-users"></i> Manage Users</button>
-      <button class="tab-btn" onclick="switchTab('notices')"><i class="fa-solid fa-bullhorn"></i> Site & Ads</button>
-      <button class="tab-btn" onclick="switchTab('reviews')"><i class="fa-solid fa-star"></i> Reviews</button>
-      <button class="tab-btn" onclick="switchTab('messages')"><i class="fa-solid fa-envelope"></i> Messages</button>
-    </div>
-
-    <!-- USERS TAB -->
-    <div id="users" class="tab-content active glass-card" style="margin-top: 20px;">
-      <h3><i class="fa-solid fa-user-plus"></i> Add / Edit User</h3>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
-        <input type="text" id="uName" placeholder="Full Name">
-        <input type="text" id="uId" placeholder="User ID (Unique)">
-        <input type="text" id="uPass" placeholder="Password">
-        <input type="number" id="uDevices" placeholder="Allowed Devices (Default: 1)">
-        <input type="number" id="uDays" placeholder="Validity Days (e.g. 30)">
+  <!-- ================= MAIN APP WORKSPACE ================= -->
+  <!-- YE AAPKA DUSRA SEPARATE PAGE HAI (SPA Logic) -->
+  <div id="mainAppWrapper">
+    <nav class="navbar glass-card">
+      <div class="brand-logo">
+        <div class="brand-icon"><i class="fa-solid fa-shield-halved"></i></div><span class="hide-mobile">Workspace</span>
       </div>
-      <button class="btn-primary" onclick="saveUser()">Save User</button>
-      <p id="userMsg" style="font-size: 13px; color: var(--accent-green); margin-top: 10px;"></p>
-
-      <h3 style="margin-top: 30px;"><i class="fa-solid fa-users-viewfinder"></i> Active Users</h3>
-      <div style="overflow-x: auto;">
-        <table id="usersTable">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>User ID</th>
-              <th>Password</th>
-              <th>Devices Used</th>
-              <th>Expiry</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <div class="hide-mobile" style="font-size: 12px; color: var(--text-muted); margin-right: 10px;"><i class="fa-regular fa-user" style="margin-right:4px;"></i> <strong id="welcomeName" style="color: var(--text-main);"></strong></div>
+        <button class="btn-glass" onclick="toggleTheme()" title="Toggle Theme" style="padding: 8px 10px; border-radius: 50%;"><i class="fa-solid fa-sun"></i></button>
+        <button class="btn-glass" onclick="logoutApp()" title="Log Out" style="color: var(--danger); border-color: rgba(239, 68, 68, 0.3); padding: 8px 10px; border-radius: 50%;"><i class="fa-solid fa-power-off"></i></button>
       </div>
+    </nav>
+    <div class="workspace-header">
+      <h1>Generate Your Revisions</h1>
     </div>
 
-    <!-- NOTICES & ADS TAB -->
-    <div id="notices" class="tab-content glass-card" style="margin-top: 20px;">
-      <h3><i class="fa-solid fa-globe"></i> Global App Settings</h3>
-      <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
-          <input type="checkbox" id="publicModeToggle" style="width: auto;">
-          <strong>Make App Public (No Login Required)</strong>
-        </label>
-        <button class="btn-primary" style="margin-top: 10px;" onclick="saveSettings()">Save Setting</button>
+    <div class="workspace-container">
+      <!-- PANEL 1: KNOWLEDGE SOURCE -->
+      <div class="panel glass-card">
+        <h2><i class="fa-solid fa-database" style="color: var(--accent-blue);"></i> 1. Knowledge Source</h2>
+
+        <label><strong>Upload Notes (PDF/Image):</strong></label>
+        <input type="file" id="fileInput" accept="image/*, application/pdf">
+        <div id="fileStatus" style="font-size:13px; font-weight:600; color:var(--accent-green); margin-top:-10px; margin-bottom:15px; word-break:break-all;"></div>
+
+        <div style="text-align: center; margin: 5px 0 15px; color: var(--text-muted); font-size: 11px; font-weight: 700;">-- OR --</div>
+
+        <label><strong>Paste Text / Question:</strong></label>
+        <textarea id="textInput" placeholder="Paste topic or ask a question..." style="min-height: 120px;"></textarea>
+
+        <!-- FOCUS AREA FEATURE -->
+        <div style="background: rgba(59, 130, 246, 0.05); padding: 15px; border-radius: 10px; border: 1px dashed var(--accent-blue); margin-top: 15px;">
+          <label style="color:var(--accent-blue); font-size:14px;"><i class="fa-solid fa-crosshairs"></i> <strong>Focus Area (Optional)</strong></label>
+          <p style="font-size:11px; color:var(--text-muted); margin:5px 0 10px;">Badi PDF daali hai? Yahan likho ki sirf kis Unit ya Topic ka notes chahiye taaki fast load ho.</p>
+          <input type="text" id="focusArea" placeholder="E.g., Only Unit 3, or Questions from Page 5" style="margin-bottom:0;">
+        </div>
       </div>
 
-      <h3><i class="fa-solid fa-bullhorn"></i> Premium Ad Banner</h3>
-      <input type="text" id="adText" placeholder="Ad Text / Title">
-      <input type="text" id="adImg" placeholder="Image URL (Optional)">
-      <input type="text" id="adLink" placeholder="Click Link URL (Optional)">
-      <label style="cursor: pointer;"><input type="checkbox" id="adActive" style="width: auto;"> Show Banner on Website</label><br>
-      <button class="btn-primary" style="margin-top: 10px;" onclick="saveAd()">Update Ad Banner</button>
+      <!-- PANEL 2: CUSTOMIZE & GENERATE -->
+      <div class="panel glass-card">
+        <h2><i class="fa-solid fa-sliders" style="color: var(--accent-green);"></i> 2. Customise & Generate</h2>
+        <label><strong>Detail Level:</strong></label>
+        <select id="detailLevel">
+          <option value="short">Short (Last Minute)</option>
+          <option value="standard" selected>Standard Exam Format</option>
+          <option value="deep">Deep Dive</option>
+        </select>
 
-      <h3 style="margin-top: 30px;"><i class="fa-solid fa-scroll"></i> Scrolling Ticker (Notices)</h3>
-      <input type="text" id="noticeText" placeholder="Type new scrolling notice here...">
-      <button class="btn-primary" onclick="addNotice()">Add to Ticker</button>
-      <ul id="noticeList" style="margin-top: 15px; padding-left: 20px; color: var(--text-muted);"></ul>
-    </div>
+        <div style="display:flex; gap:20px; flex-wrap:wrap; margin-bottom:20px;">
+          <label style="cursor:pointer;"><input type="checkbox" id="magicTrick" style="width:auto; margin:0 5px 0 0;"> 🪄 Memory Trick</label>
+          <label style="cursor:pointer;"><input type="checkbox" id="examMode" checked style="width:auto; margin:0 5px 0 0;"> 🎯 Exam-Oriented</label>
+        </div>
 
-    <!-- REVIEWS TAB -->
-    <div id="reviews" class="tab-content glass-card" style="margin-top: 20px;">
-      <h3><i class="fa-solid fa-star"></i> User Reviews</h3>
-      <div style="overflow-x: auto;">
-        <table id="reviewsTable">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Name</th>
-              <th>Rating</th>
-              <th>Review</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </div>
+        <div class="btn-grid">
+          <button class="btn-glass" onclick="generateAI('Revision Notes')"><i class="fa-solid fa-pen-nib"></i> Notes</button>
+          <button class="btn-glass" onclick="generateAI('10 MCQs')"><i class="fa-solid fa-list-check"></i> MCQs</button>
+          <button class="btn-glass" onclick="generateAI('Quick Summary')"><i class="fa-solid fa-bolt"></i> Summary</button>
+          <button class="btn-glass" onclick="generateAI('Text-based Mindmap')"><i class="fa-solid fa-diagram-project"></i> Mindmap</button>
+        </div>
 
-    <!-- MESSAGES TAB -->
-    <div id="messages" class="tab-content glass-card" style="margin-top: 20px;">
-      <h3><i class="fa-solid fa-envelope"></i> Direct Messages</h3>
-      <div style="overflow-x: auto;">
-        <table id="msgsTable">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Name</th>
-              <th>Contact</th>
-              <th>Message</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+        <h2 style="margin-top: 30px;"><i class="fa-solid fa-terminal" style="color: var(--text-muted);"></i> 3. Output</h2>
+        <div class="loader" id="loader"><i class="fa-solid fa-circle-notch fa-spin"></i> Analyzing your syllabus...</div>
+        <div class="output-box" id="outputArea"></div>
+        <button class="btn-primary" id="pdfBtn" style="background: var(--accent-green); color: #fff; display: none;" onclick="window.print()"><i class="fa-solid fa-download" style="margin-right:8px;"></i> Save as PDF</button>
       </div>
     </div>
   </div>
 
   <script>
-    // 🚨 YAHAN APNI API LINK DAALO (same as index.html)
+    // 🚨 APNI API YAHAN DAALO
     const API_URL = "https://ab-to-padh-le-api.aniket07r.workers.dev";
-    let secretKey = localStorage.getItem("adminSecret") || "";
+    let isAppPublic = true;
+    let quizDataStore = [];
+    let mindmapPanZoomInstance = null;
 
-    if (secretKey) {
-      document.getElementById("authScreen").style.display = "none";
-      document.getElementById("dashboardScreen").style.display = "block";
-      loadAllData();
+    // ================= INITIALIZATION & AUTO-LOGIN =================
+    document.addEventListener("DOMContentLoaded", async () => {
+      const savedToken = localStorage.getItem("deviceToken");
+      const savedUserId = localStorage.getItem("userId");
+      const savedUserName = localStorage.getItem("userName");
+
+      try {
+        const response = await fetch(`${API_URL}/status`);
+        const data = await response.json();
+        isAppPublic = data.isPublicMode;
+      } catch (e) {
+        console.log("Status fetch failed");
+      }
+
+      if (!isAppPublic && savedToken && savedUserId) {
+        showMainApp(savedUserName);
+      } else {
+        document.getElementById("fullScreenLoader").style.display = "none";
+        document.getElementById("landingPage").style.display = "block";
+        loadSiteContent();
+      }
+    });
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      const newTheme = html.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      html.setAttribute("data-theme", newTheme);
+      document.querySelectorAll(".fa-sun, .fa-moon").forEach(icon => {
+        icon.className = newTheme === "dark" ? "fa-solid fa-sun" : "fa-solid fa-moon";
+      });
     }
 
-    function loginAdmin() {
-      secretKey = document.getElementById("adminSecret").value;
-      if (!secretKey) return;
-      localStorage.setItem("adminSecret", secretKey);
-      document.getElementById("authScreen").style.display = "none";
-      document.getElementById("dashboardScreen").style.display = "block";
-      loadAllData();
+    // ================= LANDING PAGE & SITE CONTENT =================
+    async function loadSiteContent() {
+      try {
+        const res = await fetch(`${API_URL}/site-content`);
+        const data = await res.json();
+
+        if (data.notices && data.notices.length > 0) {
+          const ticker = document.getElementById('tickerContainer');
+          const scrollNotices = data.notices.filter(n => !n.isSticky);
+          if (ticker && scrollNotices.length > 0) {
+            ticker.innerHTML = scrollNotices.map(n => `<span>• ${n.text}</span>`).join(' &nbsp;&nbsp;&nbsp; ');
+            document.getElementById('tickerWrapper').style.display = 'flex';
+          }
+        }
+
+        if (data.ad && data.ad.isActive) {
+          const adBanner = document.getElementById('adBanner');
+          document.getElementById('adBannerText').innerText = data.ad.text || "Announcement!";
+          if (data.ad.imageUrl) {
+            const img = document.getElementById('adBannerImg');
+            img.src = data.ad.imageUrl;
+            img.style.display = 'block';
+          }
+          if (data.ad.link) {
+            const link = document.getElementById('adBannerLink');
+            link.href = data.ad.link;
+            link.style.display = 'inline-flex';
+          }
+          adBanner.style.display = 'flex';
+        }
+
+        if (data.reviews && data.reviews.length > 0) {
+          document.getElementById('reviewsSection').style.display = 'block';
+          const container = document.getElementById('reviewsContainer');
+          let html = '';
+          data.reviews.reverse().slice(0, 10).forEach((r, idx) => {
+            const id = `rev-${idx}`;
+            html += `<div class="glass-card review-card">
+             <div class="stars">${'⭐'.repeat(r.rating)}</div>
+             <div class="review-text" id="${id}">${r.text}</div>
+             <button class="read-more-btn" id="btn-${id}" onclick="toggleText('${id}')">Read More</button>
+             <div class="review-author"><i class="fa-solid fa-user"></i> ${r.name}</div>
+           </div>`;
+          });
+          container.innerHTML = html;
+          setTimeout(() => {
+            document.querySelectorAll('.review-text').forEach(el => {
+              if (el.scrollHeight > el.clientHeight) document.getElementById('btn-' + el.id).style.display = 'block';
+            });
+          }, 100);
+        }
+      } catch (e) {
+        console.log("Site content load error");
+      }
     }
 
-    function logout() {
-      localStorage.removeItem("adminSecret");
+    function toggleText(id) {
+      const el = document.getElementById(id);
+      const btn = document.getElementById('btn-' + id);
+      el.classList.toggle('expanded');
+      btn.innerText = el.classList.contains('expanded') ? 'Show Less' : 'Read More';
+    }
+
+    // Forms Logic
+    async function submitReview() {
+      const rating = document.querySelector('input[name="rating"]:checked').value;
+      const name = document.getElementById("revName").value;
+      const text = document.getElementById("revText").value;
+      if (!text) {
+        const revMsg = document.getElementById("revMsg");
+        revMsg.innerText = "Please write a review.";
+        revMsg.style.color = "var(--warning)";
+        return;
+      }
+
+      const btn = document.getElementById("btnRev");
+      btn.innerHTML = "Submitting...";
+      btn.disabled = true;
+      try {
+        const res = await fetch(`${API_URL}/submit-review`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            name,
+            rating,
+            text
+          })
+        });
+        const data = await res.json();
+        document.getElementById("revMsg").innerText = data.message;
+        document.getElementById("revMsg").style.color = data.isFlagged ? "var(--warning)" : "var(--accent-green)";
+        if (data.success) {
+          document.getElementById("revName").value = "";
+          document.getElementById("revText").value = "";
+        }
+      } catch (err) {
+        document.getElementById("revMsg").innerText = "Failed to submit.";
+      }
+      btn.innerHTML = "Submit Review";
+      btn.disabled = false;
+    }
+
+    async function submitMessage() {
+      const name = document.getElementById("msgName").value;
+      const contact = document.getElementById("msgContact").value;
+      const text = document.getElementById("msgText").value;
+      if (!text || !name) {
+        const msgStatus = document.getElementById("msgStatus");
+        msgStatus.innerText = "Please enter name and message.";
+        msgStatus.style.color = "var(--warning)";
+        return;
+      }
+
+      const btn = document.getElementById("btnMsg");
+      btn.innerHTML = "Sending...";
+      btn.disabled = true;
+      try {
+        await fetch(`${API_URL}/submit-message`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            name,
+            contact,
+            text
+          })
+        });
+        document.getElementById("msgStatus").innerText = "Message sent successfully!";
+        document.getElementById("msgStatus").style.color = "var(--accent-green)";
+        document.getElementById("msgName").value = "";
+        document.getElementById("msgContact").value = "";
+        document.getElementById("msgText").value = "";
+      } catch (err) {
+        document.getElementById("msgStatus").innerText = "Failed to send message.";
+      }
+      btn.innerHTML = "Send Message";
+      btn.disabled = false;
+    }
+
+    // ================= LOGIN & WORKSPACE ENTRY =================
+    function handleEnterWorkspace() {
+      if (isAppPublic) showMainApp("Guest");
+      else openLoginModal();
+    }
+
+    function openLoginModal() {
+      const modal = document.getElementById("loginModalOverlay");
+      const content = document.getElementById("loginModalContent");
+      modal.style.display = "flex";
+      setTimeout(() => {
+        modal.style.opacity = "1";
+        content.classList.add("active");
+      }, 10);
+    }
+
+    function closeLoginModal() {
+      const modal = document.getElementById("loginModalOverlay");
+      const content = document.getElementById("loginModalContent");
+      modal.style.opacity = "0";
+      content.classList.remove("active");
+      setTimeout(() => {
+        modal.style.display = "none";
+      }, 300);
+    }
+
+    function showMainApp(name) {
+      document.getElementById("fullScreenLoader").style.display = "none";
+      document.getElementById("landingPage").style.display = "none";
+      document.getElementById("loginModalOverlay").style.display = "none";
+      document.getElementById("mainAppWrapper").style.display = "block";
+      if (name) document.getElementById("welcomeName").innerText = name.split(" ")[0];
+      window.scrollTo(0, 0);
+    }
+
+    async function handleLogin() {
+      const userId = document.getElementById("userIdInput").value.trim();
+      const password = document.getElementById("userPassInput").value.trim();
+      const errorDiv = document.getElementById("loginError");
+      const btn = document.getElementById("loginBtn");
+
+      if (!userId || !password) {
+        errorDiv.innerText = "Please enter both details.";
+        errorDiv.style.display = "block";
+        return;
+      }
+
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Verifying...`;
+      btn.disabled = true;
+      errorDiv.style.display = "none";
+
+      try {
+        const response = await fetch(`${API_URL}/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            userId,
+            password,
+            deviceToken: localStorage.getItem("deviceToken") || ""
+          })
+        });
+        const data = await response.json();
+        if (data.success) {
+          localStorage.setItem("deviceToken", data.token);
+          localStorage.setItem("userId", userId);
+          localStorage.setItem("userName", data.name);
+          showMainApp(data.name);
+        } else {
+          errorDiv.innerText = data.error;
+          errorDiv.style.display = "block";
+        }
+      } catch (err) {
+        errorDiv.innerText = "Connection failed.";
+        errorDiv.style.display = "block";
+      } finally {
+        btn.innerHTML = "Authenticate & Enter";
+        btn.disabled = false;
+      }
+    }
+
+    async function logoutApp() {
+      const userId = localStorage.getItem("userId");
+      const deviceToken = localStorage.getItem("deviceToken");
+      if (userId && deviceToken && !isAppPublic) {
+        try {
+          await fetch(`${API_URL}/logout`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              userId,
+              deviceToken
+            })
+          });
+        } catch (e) {}
+      }
+      localStorage.clear();
       window.location.reload();
     }
 
-    function switchTab(tabId) {
-      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
-      document.getElementById(tabId).classList.add('active');
-      event.target.classList.add('active');
+    // ================= AI WORKSPACE LOGIC =================
+    document.getElementById('fileInput').addEventListener('change', function(e) {
+      const statusDiv = document.getElementById('fileStatus');
+      if (e.target.files[0]) {
+        statusDiv.innerHTML = `<i class="fa-solid fa-file-circle-check"></i> Document Attached: ${e.target.files[0].name}`;
+      } else {
+        statusDiv.innerHTML = "";
+      }
+    });
+
+    let loaderInterval;
+    const loaderMsgs = ["Scanning Document...", "Extracting Key Concepts...", "Formatting for Exams...", "Preparing output..."];
+
+    function startLoader() {
+      let i = 0;
+      document.getElementById("loader").innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> ${loaderMsgs[i]}`;
+      loaderInterval = setInterval(() => {
+        i = (i + 1) % loaderMsgs.length;
+        document.getElementById("loader").innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> ${loaderMsgs[i]}`;
+      }, 1500);
     }
 
-    // ================= API CALL HELPER =================
-    async function adminFetch(endpoint, method = "GET", body = null) {
+    async function generateAI(formatType) {
+      const textInput = document.getElementById('textInput').value;
+      const fileInput = document.getElementById('fileInput').files[0];
+      const focusArea = document.getElementById('focusArea').value;
+      const outputArea = document.getElementById('outputArea');
+
+      if (!textInput.trim() && !fileInput) {
+        outputArea.innerHTML = `<div style="color:var(--danger); background:rgba(239, 68, 68, 0.1); padding:15px; border-radius:10px;">❌ Bhai, pehle thoda text paste karo ya file upload karo!</div>`;
+        outputArea.style.display = 'block';
+        return;
+      }
+
+      if (mindmapPanZoomInstance) {
+        mindmapPanZoomInstance.destroy();
+        mindmapPanZoomInstance = null;
+      }
+
+      const loader = document.getElementById('loader');
+      outputArea.style.display = 'none';
+      document.getElementById('pdfBtn').style.display = 'none';
+      loader.style.display = "block";
+      startLoader();
+
+      const formData = new FormData();
+      if (textInput) formData.append('text', textInput);
+      if (fileInput) formData.append('file', fileInput);
+      formData.append('formatType', formatType);
+      formData.append('detailLevel', document.getElementById('detailLevel').value);
+      formData.append('magicTrick', document.getElementById('magicTrick').checked);
+      formData.append('examMode', document.getElementById('examMode').checked);
+      if (focusArea) formData.append('focusArea', focusArea);
+      formData.append('userId', localStorage.getItem("userId") || "guest");
+      formData.append('deviceToken', localStorage.getItem("deviceToken") || "guest_token");
+
+      let cleanMermaid = "";
+
       try {
-        let options = {
-          method,
-          headers: {
-            "admin-secret": secretKey,
-            "Content-Type": "application/json"
-          }
-        };
-        if (body) options.body = JSON.stringify(body);
+        const response = await fetch(`${API_URL}/generate`, {
+          method: 'POST',
+          body: formData
+        });
 
-        let res = await fetch(API_URL + endpoint, options);
-        let data = await res.json();
-
-        if (res.status === 403) {
-          alert("Invalid Admin Secret! Logging out...");
-          logout();
-          return null;
+        if (!response.ok) {
+          const errData = await response.json();
+          throw new Error(errData.error || "Server timeout or error.");
         }
-        return data;
-      } catch (e) {
-        alert("Network Error!");
-        return null;
+
+        const data = await response.json();
+        let html = `<h3 style="color:var(--text-main); margin-top:0;">${formatType}</h3><hr style="border:0; border-top:1px solid var(--glass-border); margin:15px 0;">`;
+
+        if (formatType === 'Text-based Mindmap') {
+          let match = (data.aiResponse || "").match(/```(?:mermaid)?\s*([\s\S]*?)```/i);
+          cleanMermaid = match ? match[1].trim() : (data.aiResponse || "").trim();
+          cleanMermaid = cleanMermaid.replace(/```mermaid/gi, "").replace(/```/g, "").trim();
+
+          let startIndex = cleanMermaid.search(/^(graph|mindmap|pie|sequenceDiagram|classDiagram|stateDiagram|gantt|info|journey|requirementDiagram)/im);
+          if (startIndex !== -1) {
+            cleanMermaid = cleanMermaid.substring(startIndex);
+          }
+
+          let safeRawText = cleanMermaid.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+          html += `<div class="ai-content">
+                <div id="mermaidFallbackMsg" style="display:none; color:var(--warning); background:rgba(245, 158, 11, 0.1); padding:10px; border-radius:8px; margin-bottom:15px; font-size:13px;"><i class="fa-solid fa-triangle-exclamation"></i> AI generated a complex structure that couldn't be drawn perfectly. Here is the raw layout:</div>
+                
+                <div style="font-size: 11px; color: var(--accent-blue); text-align: center; margin-bottom: 8px;"><i class="fa-solid fa-magnifying-glass-plus"></i> Hint: You can drag to pan and scroll to zoom in/out!</div>
+                <div id="mermaidDiagram">
+                   <div style="text-align:center; padding: 20px;"><i class="fa-solid fa-circle-notch fa-spin"></i> Drawing Mindmap...</div>
+                </div>
+                
+                <pre id="mermaidRawText" style="display:none; background:var(--input-bg); padding:15px; border-radius:8px; border:1px solid var(--glass-border); overflow-x:auto; font-size:13px; color:var(--text-main); white-space: pre-wrap;">${safeRawText}</pre>
+            </div>`;
+        } else if (formatType === '10 MCQs') {
+          quizDataStore = data.questions || data;
+          html += renderQuizUI(quizDataStore);
+        } else {
+          html += `<div class="ai-content">${marked.parse(data.aiResponse || data.text || "")}</div>`;
+        }
+
+        html += `<div style="text-align:center; font-size:12px; color:var(--text-muted); margin-top:30px; border-top:1px dashed var(--glass-border); padding-top:15px;">Generated via <strong>Ab To Padh Le</strong> 🚀 <br><span style="font-size:10px; opacity:0.8; margin-top:4px; display:inline-block;">Developed by <strong>Aniket Kewat</strong></span></div>`;
+
+        outputArea.innerHTML = html;
+        document.getElementById('pdfBtn').style.display = 'inline-flex';
+
+        clearInterval(loaderInterval);
+        loader.style.display = 'none';
+        outputArea.style.display = 'block';
+
+        if (formatType === 'Text-based Mindmap' && cleanMermaid) {
+          try {
+            const uniqueId = 'mermaid-svg-' + Date.now();
+            const {
+              svg
+            } = await mermaid.render(uniqueId, cleanMermaid);
+            const diagramContainer = document.getElementById('mermaidDiagram');
+            diagramContainer.innerHTML = svg;
+
+            setTimeout(() => {
+              const svgElement = diagramContainer.querySelector('svg');
+              if (svgElement) {
+                svgElement.style.width = "100%";
+                svgElement.style.height = "100%";
+                svgElement.style.maxWidth = "none";
+
+                mindmapPanZoomInstance = svgPanZoom(svgElement, {
+                  zoomEnabled: true,
+                  controlIconsEnabled: true,
+                  fit: true,
+                  center: true,
+                  minZoom: 0.1,
+                  maxZoom: 10
+                });
+              }
+            }, 100);
+
+          } catch (mermaidError) {
+            console.error("Mermaid Render Error:", mermaidError);
+            document.getElementById('mermaidDiagram').style.display = 'none';
+            document.getElementById('mermaidFallbackMsg').style.display = 'block';
+            document.getElementById('mermaidRawText').style.display = 'block';
+          }
+        }
+
+      } catch (err) {
+        outputArea.innerHTML = `<div style="color:var(--danger); background:rgba(239, 68, 68, 0.1); padding:15px; border-radius:10px;">❌ Error: ${err.message}</div>`;
+
+        if (err.message.includes("Session Expired") || err.message.includes("Unauthorized")) {
+          setTimeout(() => logoutApp(), 2500);
+        }
+      } finally {
+        clearInterval(loaderInterval);
+        loader.style.display = 'none';
+        outputArea.style.display = 'block';
+
+        if (window.MathJax) MathJax.typesetPromise([outputArea]).catch(e => console.log(e));
+
+        if (window.innerWidth < 768) {
+          outputArea.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
       }
     }
 
-    // ================= LOAD ALL DATA =================
-    async function loadAllData() {
-      fetchUsers();
-      fetchNotices();
-      fetchSettingsAndAds();
-      fetchReviews();
-      fetchMessages();
+    // ================= MCQ INTERACTIVE QUIZ ENGINE =================
+    let userAnswers = {};
+
+    function renderQuizUI(questionsArray) {
+      userAnswers = {};
+      if (!Array.isArray(questionsArray)) return "Error: Invalid quiz format received.";
+
+      let html = `<div>`;
+      questionsArray.forEach((q, qIndex) => {
+        html += `
+            <div class="quiz-card" id="qCard-${qIndex}">
+                <div class="quiz-question">Q${qIndex + 1}. ${q.question}</div>
+                <div>`;
+
+        q.options.forEach((opt, optIndex) => {
+          html += `<button class="quiz-opt-btn" id="btn-${qIndex}-${optIndex}" onclick="selectOption(${qIndex}, ${optIndex})">${String.fromCharCode(65 + optIndex)}. ${opt}</button>`;
+        });
+
+        html += `</div></div>`;
+      });
+
+      html += `<button class="btn-primary" id="submitQuizBtn" onclick="submitQuiz()" style="margin-top:20px;">Submit Test</button>`;
+      html += `<div class="score-board" id="finalScoreBoard"></div>`;
+      html += `</div>`;
+      return html;
     }
 
-    // --- USERS LOGIC ---
-    async function fetchUsers() {
-      let data = await adminFetch("/admin/users");
-      if (!data) return;
-      let tbody = document.querySelector("#usersTable tbody");
-      tbody.innerHTML = "";
-
-      for (let [id, user] of Object.entries(data.users)) {
-        let activeCount = user.activeTokens ? user.activeTokens.length : 0;
-        let tr = document.createElement("tr");
-        tr.innerHTML = `
-                    <td>${user.name}</td>
-                    <td><strong style="color:var(--accent-blue);">${id}</strong></td>
-                    <td>${user.password}</td>
-                    <td>${activeCount} / ${user.allowedDevices || 1}</td>
-                    <td>${user.expiresAt}</td>
-                    <td>
-                        <button class="btn-danger" onclick="deleteUser('${id}')"><i class="fa-solid fa-trash"></i></button>
-                        <button class="btn-primary" style="padding:5px; font-size:12px;" onclick="resetDevice('${id}')"><i class="fa-solid fa-rotate-left"></i> Reset</button>
-                    </td>
-                `;
-        tbody.appendChild(tr);
+    function selectOption(qIndex, optIndex) {
+      userAnswers[qIndex] = optIndex;
+      for (let i = 0; i < 4; i++) {
+        let btn = document.getElementById(`btn-${qIndex}-${i}`);
+        if (btn) btn.classList.remove('selected');
       }
+      document.getElementById(`btn-${qIndex}-${optIndex}`).classList.add('selected');
     }
 
-    async function saveUser() {
-      let body = {
-        name: document.getElementById("uName").value,
-        userId: document.getElementById("uId").value,
-        password: document.getElementById("uPass").value,
-        allowedDevices: document.getElementById("uDevices").value || 1,
-        validityDays: document.getElementById("uDays").value || 30
-      };
-      if (!body.userId || !body.password) return alert("User ID and Password required!");
+    function submitQuiz() {
+      let score = 0;
+      let total = quizDataStore.length;
 
-      let data = await adminFetch("/admin/user", "POST", body);
-      if (data && data.success) {
-        document.getElementById("userMsg").innerText = data.message;
-        fetchUsers(); // reload list
-      } else if (data) {
-        alert(data.error);
-      }
-    }
+      quizDataStore.forEach((q, qIndex) => {
+        let correctOpt = q.answer;
+        let userOpt = userAnswers[qIndex];
 
-    async function deleteUser(userId) {
-      if (!confirm("Are you sure you want to delete user: " + userId + "?")) return;
-      await adminFetch("/admin/user", "DELETE", {
-        userId
+        for (let i = 0; i < 4; i++) {
+          let btn = document.getElementById(`btn-${qIndex}-${i}`);
+          if (btn) {
+            btn.disabled = true;
+            if (i === correctOpt) btn.classList.add('correct');
+            if (userOpt !== undefined && i === userOpt && userOpt !== correctOpt) {
+              btn.classList.add('wrong');
+            }
+          }
+        }
+
+        if (userOpt === correctOpt) score++;
       });
-      fetchUsers();
-    }
 
-    async function resetDevice(userId) {
-      await adminFetch("/admin/reset-device", "POST", {
-        userId
-      });
-      alert("Devices reset for " + userId);
-      fetchUsers();
-    }
-
-    // --- SETTINGS, ADS & NOTICES LOGIC ---
-    async function fetchSettingsAndAds() {
-      // Settings
-      let res = await fetch(API_URL + "/status");
-      let settings = await res.json();
-      document.getElementById("publicModeToggle").checked = settings.isPublicMode;
-
-      // Ads
-      let adData = await adminFetch("/admin/ad");
-      if (adData) {
-        document.getElementById("adText").value = adData.text || "";
-        document.getElementById("adImg").value = adData.imageUrl || "";
-        document.getElementById("adLink").value = adData.link || "";
-        document.getElementById("adActive").checked = adData.isActive || false;
-      }
-    }
-
-    async function saveSettings() {
-      let isPublicMode = document.getElementById("publicModeToggle").checked;
-      let data = await adminFetch("/admin/settings", "POST", {
-        isPublicMode
-      });
-      if (data) alert(data.message);
-    }
-
-    async function saveAd() {
-      let body = {
-        text: document.getElementById("adText").value,
-        imageUrl: document.getElementById("adImg").value,
-        link: document.getElementById("adLink").value,
-        isActive: document.getElementById("adActive").checked
-      };
-      let data = await adminFetch("/admin/ad", "POST", body);
-      if (data) alert(data.message);
-    }
-
-    async function fetchNotices() {
-      let notices = await adminFetch("/admin/notices");
-      if (!notices) return;
-      let ul = document.getElementById("noticeList");
-      ul.innerHTML = "";
-      notices.forEach(n => {
-        if (n.isActive) ul.innerHTML += `<li style="margin-bottom:5px;">${n.text}</li>`;
-      });
-    }
-
-    async function addNotice() {
-      let text = document.getElementById("noticeText").value;
-      if (!text) return;
-
-      let notices = await adminFetch("/admin/notices") || [];
-      notices.push({
-        text: text,
-        isActive: true,
-        id: Date.now()
-      });
-      await adminFetch("/admin/notices", "POST", notices);
-      document.getElementById("noticeText").value = "";
-      fetchNotices();
-    }
-
-    // --- REVIEWS LOGIC ---
-    async function fetchReviews() {
-      let data = await adminFetch("/admin/reviews");
-      if (!data) return;
-      let tbody = document.querySelector("#reviewsTable tbody");
-      tbody.innerHTML = "";
-
-      data.reviews.forEach(r => {
-        let tr = document.createElement("tr");
-        let statusColor = r.status === 'pending' ? 'var(--warning)' : 'var(--accent-green)';
-        tr.innerHTML = `
-                    <td>${r.date || '-'}</td>
-                    <td>${r.name}</td>
-                    <td>${'⭐'.repeat(r.rating)}</td>
-                    <td style="max-width:300px; word-wrap:break-word;">${r.text}</td>
-                    <td style="color:${statusColor}; font-weight:bold;">${r.status.toUpperCase()}</td>
-                    <td>
-                        ${r.status === 'pending' ? `<button class="btn-success" onclick="reviewAction('${r.id}', 'approve')">Approve</button>` : ''}
-                        <button class="btn-danger" onclick="reviewAction('${r.id}', 'delete')">Delete</button>
-                    </td>
-                `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    async function reviewAction(id, action) {
-      await adminFetch("/admin/review-action", "POST", {
-        id,
-        action
-      });
-      fetchReviews();
-    }
-
-    // --- MESSAGES LOGIC ---
-    async function fetchMessages() {
-      let data = await adminFetch("/admin/messages");
-      if (!data) return;
-      let tbody = document.querySelector("#msgsTable tbody");
-      tbody.innerHTML = "";
-
-      data.messages.forEach(m => {
-        let tr = document.createElement("tr");
-        let fw = m.status === 'unread' ? 'bold' : 'normal';
-        tr.innerHTML = `
-                    <td style="font-weight:${fw};">${m.date || '-'}</td>
-                    <td style="font-weight:${fw};">${m.name}</td>
-                    <td style="font-weight:${fw};">${m.contact}</td>
-                    <td style="max-width:300px; font-weight:${fw};">${m.message}</td>
-                    <td>
-                        ${m.status === 'unread' ? `<button class="btn-success" onclick="msgAction('${m.id}', 'mark_read')">Mark Read</button>` : ''}
-                        <button class="btn-danger" onclick="msgAction('${m.id}', 'delete')">Delete</button>
-                    </td>
-                `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    async function msgAction(id, action) {
-      await adminFetch("/admin/message-action", "POST", {
-        id,
-        action
-      });
-      fetchMessages();
+      document.getElementById('submitQuizBtn').style.display = 'none';
+      const scoreBoard = document.getElementById('finalScoreBoard');
+      scoreBoard.innerHTML = `Your Score: ${score} / ${total}`;
+      scoreBoard.style.display = 'block';
     }
   </script>
 </body>
